@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Update Users</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 0px 10px 0px;  {#t r b l}
+	}
+	
+	th {
+	border-bottom: 1px solid black;
+	}
+
+	td {
+	border-bottom: 1px solid #ddd;
+	}
+
+	table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+
+	.align2bottomleft {
+  	margin-left: 0px;
+  	margin-bottom: 0px;
+	}
+	</style>
+  </head>
+  <body>
+{% load custom_template_tags %}
+	{% if items %}
+		<table style="width:80%" class="align2center">
+		<tr>
+		<th>S.No</th>
+		<th>UserName</th>
+		<th>Email</th>
+		<th>Active status</th>
+		<th>Manage User</th>
+		</tr>
+		{% for sno,item in items %}
+			<tr>
+			<td>{{sno}}</td><td>{{item.username}}</td>
+			<td>{{item.email}}</td><td>{{item.is_active}}</td>
+			{% if item.is_active %}
+				{% setvar "Deactivate" as action %}
+			{% else %}
+				{% setvar "Activate" as action %}
+			{% endif %}
+			<td><p><form>
+				{% csrf_token %}
+				<button 
+				formaction="{% url 'app2:manage_user' action item.id %}"
+				formmethod="post"
+				type="submit">{{ action }}</button>
+			    </form></p>
+			    <a href="{% url 'app2:view_profile' item.id %}" target="_blank">
+				<button type="button">Open Profile</button></a>
+			    
+			</td>	
+			</tr>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No users are available.</p>
+		</table>
+	{% endif %}
+	
+	<table style="position: fixed; right: 30px; bottom: 50px; border:0;"><tr>
+		<td style="border=0; padding:5px"><a href="{% url "homeview" %}"><button>Home</button></a></td>
+    		<td style="border=0; padding:5px"><a href="{% url "logout" %}"><button>Logout</button></a></td>
+	</tr></table>
+
+{% comment %}
+	<label for="update">Update Order #No:</label>
+		<input type="text" name="upd_sno">
+		<input type="submit" value="Update order" formaction="{% url 'app1:mng_order' "upd" "0" %}">
+	
+	 <li><a href="{% url 'app1:product' prd.psno %}">{{prd.pname}}</a></td><td>;;{{prd.pmf}}</a></li> 
+{% endcomment %}
+  </body>
+</html>

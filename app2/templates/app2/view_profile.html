@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>View Profile</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 0px 10px 0px;  {#t r b l}
+	}
+	
+	th {
+	border-right: 1px solid #ddd;
+	}
+
+	td {
+	border-bottom: 0px solid #ddd;
+	}
+
+	table {
+	border: 2px solid black;
+	border-collapse: collapse;
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+
+	.align2bottomleft {
+  	margin-left: 0px;
+  	margin-bottom: 0px;
+	}
+	</style>
+  </head>
+  <body>
+{% load custom_template_tags %}
+{# {% if items %} #}
+
+
+
+
+		<table style="width:80%">
+		<tr><th>UserName</th> <td>{{user.username}}</td></tr>
+		<tr><th>Email</th> <td>{{user.email}}</td></tr>
+		<tr><th>First Name</th> <td>{{user.first_name}}</td></tr>
+		<tr><th>Last Name</th> <td>{{user.last_name}}</td></tr>
+		<tr><th>Date of birth</th> <td>{{user.udob}}</td></tr>
+		<tr><th>Employer Name</th> <td>{{user.uemp}}</td></tr>
+		<tr><th>Address</th> <td>{{user.uaddr}}</td></tr>
+		</table>
+
+<p>		
+<form action="{% url "app2:manage_user" "Change_Pwd" user.id%}" method="post">
+    	{% csrf_token %}
+	<input type="hidden" name="next_url" value="app2:view_profile|{{user.id}}">
+
+	<label for="old_pwd">Current password: (Optional: if you're a store-owner)</label>
+	<input type="password" name="old_pwd">
+	<label for="old_pwd">New password:</label>
+	<input type="password" name="new_pwd">
+	<input type="submit" value="Change Password">
+</form>
+</p>		
+
+	<table style="position: fixed; right: 30px; bottom: 50px; border:0;"><tr>
+		<td style="border=0; padding:5px"><a href="{% url "homeview" %}"><button>Home</button></a></td>
+    		<td style="border=0; padding:5px"><a href="{% url "logout" %}"><button>Logout</button></a></td>
+	</tr></table>
+
+
+
+
+
+
+{% comment %}		
+		{% for sno,item in items %}
+			<tr>
+			<td>{{sno}}</td><td>{{item.username}}</td>
+			<td>{{item.email}}</td><td>{{item.is_active}}</td>
+			{% if item.is_active %}
+				{% setvar "Deactivate" as action %}
+			{% else %}
+				{% setvar "Activate" as action %}
+			{% endif %}
+			<td><form method="post">
+				{% csrf_token %}
+				<button 
+				formaction="{% url 'app2:manage_user' action item.id %}"
+				type="submit">{{ action }}</button>
+			</form></td>	
+			</tr>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No users are available.</p>
+		</table>
+	{% endif %}
+	
+	<form action="{% url "logout" %}" method="post">
+    		{% csrf_token %}
+    		<input type="submit" value="Logout" style="position: fixed; right: 30px; bottom: 50px;">
+	</form>
+
+	<label for="update">Update Order #No:</label>
+		<input type="text" name="upd_sno">
+		<input type="submit" value="Update order" formaction="{% url 'app1:mng_order' "upd" "0" %}">
+
+	 <li><a href="{% url 'app1:product' prd.psno %}">{{prd.pname}}</a></td><td>;;{{prd.pmf}}</a></li> 
+{% endcomment %}
+  </body>
+</html>
