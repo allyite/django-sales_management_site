@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sales Orders</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 0px 10px 0px;  {#t r b l}
+	}
+	
+	th {
+	border-bottom: 1px solid black;
+	}
+
+	td {
+	border-bottom: 1px solid #ddd;
+	}
+
+	table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+
+	.align2bottomleft {
+  	margin-left: 0px;
+  	margin-bottom: 0px;
+	}
+	</style>
+  </head>
+  <body>
+	{% if items %}
+		<table style="width:80%" class="align2center">
+		<tr>
+		<th>Order #Id</th>
+		<th>Customer Name</th>
+		<th>Customer Contact</th>
+		<th>Customer Email</th>
+		<th>Product</th>
+		<th>Manufacturer</th>
+		<th>Discount(%)</th>
+		<th>Final Price</th>
+		<th>Manage Order</th>
+		</tr>
+		{% for item in items %}
+			<tr><td>{{item.id}}</td><td>{{item.scust.cname}}</td>
+				<td>{{item.scust.ccn}}</td><td>{{item.scust.cmail}}</td><td>
+				{{item.sprod.pname}}</td><td>{{item.sprod.pmf}}</td>
+				<td>{{item.sdisc}}</td><td>{{item.sfp}}</td>
+
+				{% comment %}<td><a href="{% url 'app1:mng_order' "sell" item.id %}">
+				<button type="button">Sell</button></a></td>
+				{% endcomment %}
+
+				<td><form>
+					{% csrf_token %}
+					<button formmethod="post"
+					formaction="{% url 'app1:mng_order' "sell" item.id %}"
+					type="submit">Sell</button>
+					<button formmethod="post" 
+					formaction="{% url 'app1:mng_order' "del" item.id %}"
+					type="submit">Delete</button>
+				    </form>
+				    <a href="{% url 'app1:sales_orders' %}?editid={{item.id}}">
+					<p><button>Edit Order</button></p></a>
+				</td>
+				
+			</tr>
+			{% if edit_oid == item.id %}
+				<tr>
+				<p><form method="post">
+				{% csrf_token %}
+				<td></td>
+				<td>{{edit_form.scust}}</td>
+				<td></td><td></td>
+				<td>{{edit_form.sprod}}</td>
+				<td></td>
+				<td>{{edit_form.sdisc}}</td>
+				<td></td>
+				<td>
+				<input type="submit" value="Update order #{{item.id}}" formaction="{% url 'app1:mng_order' "upd" item.id %}">
+				</td>
+				</form></p>
+				</tr>
+			{% endif %}
+		{% endfor %}
+		</ul>
+		</table>
+	{% else %}
+		<p>No sales orders are available.</p>
+	{% endif %}
+	
+	<p><form method="get" action="{% url 'app1:sales_orders' %}">
+    		{# {% csrf_token %} #}
+    		<label for="sopt">Sort on:</label>
+		<select name="sortfield" id="sortfield">
+			{% for dkey,dval in sortoptions.items %}
+				{% if sortkey.0 == dval %}
+				<option value={{dval}} selected>{{dkey}}</option>
+				{% else %}
+ 				<option value={{dval}}>{{dkey}}</option>
+				{% endif %}
+			{% endfor %}
+		</select>
+		<label for=""></label>
+		<select name="sortorder">
+			{% if sortkey.1 == "desc" %}
+ 			<option value="asc">Ascending</option>
+			<option value="desc" selected>Descending</option>
+			{% else %}
+			<option value="asc" selected>Ascending</option>
+			<option value="desc">Descending</option>
+			{% endif %}
+		</select>
+		<input type="submit" value="Sort">
+	</form></p>
+
+	<p><form method="post">
+    		{% csrf_token %}
+    		{{ form }}
+    		<input type="submit" value="Add order" formaction="{% url 'app1:sales_orders' %}">
+	</form></p>
+
+
+	<table style="position: fixed; right: 30px; bottom: 50px; border:0;"><tr>
+		<td style="border=0; padding:5px"><a href="{% url "homeview" %}"><button>Home</button></a></td>
+    		<td style="border=0; padding:5px"><a href="{% url "logout" %}"><button>Logout</button></a></td>
+	</tr></table>
+
+	{% comment %}
+	 <li><a href="{% url 'app1:product' prd.psno %}">{{prd.pname}}</a></td><td>;;{{prd.pmf}}</a></li> 
+	{% endcomment %}
+  </body>
+</html>

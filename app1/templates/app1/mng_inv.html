@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Manage Inventory</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 0px 10px 0px;  {#t r b l}
+	}
+	
+	th {
+	border-bottom: 1px solid black;
+	}
+
+	td {
+	border-bottom: 1px solid #ddd;
+	}
+
+	table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+	</style>
+  </head>
+  <body>
+	{% if page_obj %}
+		<table style="width:80%" class="align2center">
+		<tr>
+		<th>S.No</th>
+		<th>Product</th>
+		<th>Manufacturer</th>
+		<th>Product Price</th>
+		<th>Distributor</th>
+		<th>Units</th>
+		<th>Delivered Date</th>
+		</tr>
+		{% for sno,item in page_obj %}
+			<tr><td>{{sno}}</td><td>{{item.iprod.pname}}</td><td>{{item.iprod.pmf}}</td><td>{{item.iprod.pmrp}}</td><td>
+				{{item.idist.dname}}</td><td>{{item.iu}}</td><td>{{item.idd}}</td>
+			</tr>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No inventory items are available.</p>
+	{% endif %}
+	</table>
+	<p><form action="{% url 'app1:manage_inv' %}" method="post">
+    		{% csrf_token %}
+    		{{ form }}
+    		<input type="submit" value="Add Inventory item">
+	</form></p>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
+	<table style="position: fixed; right: 30px; bottom: 50px; border:0;"><tr>
+		<td style="border=0; padding:5px"><a href="{% url "homeview" %}"><button>Home</button></a></td>
+    		<td style="border=0; padding:5px"><a href="{% url "logout" %}"><button>Logout</button></a></td>
+	</tr></table>
+	
+  </body>
+</html>
