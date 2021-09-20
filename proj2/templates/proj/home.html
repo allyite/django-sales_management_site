@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home page</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 10px 10px 10px;  {#t r b l}
+	}
+	
+	th {
+	border-bottom: 1px solid black;
+	}
+
+	td {
+	border-bottom: 1px solid #ddd;
+	}
+
+	table {
+	border: 2px solid black;
+	{# border-collapse: collapse; #}
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+	</style>
+  </head>
+  <body>
+
+{% for linkcateg in links %}
+
+<p><table> {# style="margin:auto;"> #}
+{% for title,link in linkcateg %}
+<tr>
+    <td>{{title}}</td>
+    <td><a href={{link}}>{{link}}</a></td>
+</tr>
+{% endfor %}
+</table></p>
+
+{% endfor %}
+
+
+<table style="position: fixed; right: 30px; bottom: 50px; border:0;"><tr>
+	<td style="border=0; padding:5px"><a href="{% url "logout" %}"><button>Logout</button></a></td>
+</tr></table>
+
+
+  </body>
+</html>

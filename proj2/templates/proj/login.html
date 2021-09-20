@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login page</title>
+	<style>
+	th, td {
+	text-align: center;
+	padding: 10px 10px 10px 10px;  {#t r b l}
+	}
+	
+	th {
+	border-bottom: 1px solid black;
+	}
+
+	td {
+	border-bottom: 1px solid #ddd;
+	}
+
+	table {
+	border: 2px solid black;
+	{# border-collapse: collapse; #}
+	}
+
+	.align2center {
+  	margin-left: auto;
+  	margin-right: auto;
+	}
+	</style>
+  </head>
+  <body>
+
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+{# {{ form }} #}
+<table style="margin:auto;">
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+<tr><td style="border-bottom: 0+;">
+<input type="submit" value="login">
+</td></tr>
+</table>
+
+{% if request.GET.next %}
+	<input type="hidden" name="next" value="{{ request.GET.next }}">
+{% else %}
+	<input type="hidden" name="next" value="{{ next }}">
+{% endif %}	
+
+</form>
+
+
+  </body>
+</html>
